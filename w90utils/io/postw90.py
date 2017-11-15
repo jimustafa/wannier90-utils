@@ -50,7 +50,7 @@ def read_bands_kpoints(fname):
 
 def read_bands(fname):
     raw_data = np.loadtxt(fname)
-    nkpts = np.max(raw_data[:, 0])
+    nkpts = int(np.max(raw_data[:, 0]))
     bands = raw_data[:, 4]
     bands = bands.reshape((nkpts, -1))
 
@@ -63,7 +63,7 @@ def read_band_velocities(fname):
     if not raw_data.shape[1] > 5:
         return None
 
-    nkpts = raw_data[-1, 0]
+    nkpts = int(raw_data[-1, 0])
     vnk = raw_data[:, 5:]
     vnk = vnk.reshape((nkpts, -1, 3))
 
