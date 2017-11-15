@@ -20,9 +20,10 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     packages=find_packages(exclude=['docs', 'tests']),
+    setup_requires=['pytest-runner'],
     install_requires=[
         'numpy',
         'scipy',
     ],
-    tests_require=['pytest'],
+    tests_require=['pytest', 'pytest-cov'],
 )
