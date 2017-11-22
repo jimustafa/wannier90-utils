@@ -6,6 +6,8 @@ import re
 import numpy as np
 
 from . import _utils
+from ._orbitals2 import orbitals
+from ._utils import cartesian2crystal
 
 
 unit_cell_regex = re.compile(
@@ -35,6 +37,33 @@ kgrid_regex = re.compile(
     r'MP_GRID\s+(?P<nk1>\d+)\s+(?P<nk2>\d+)\s+(?P<nk3>\d+)\s+',
     re.VERBOSE | re.IGNORECASE | re.DOTALL
     )
+
+projections_regex = re.compile(
+    r'BEGIN\s+PROJECTIONS\s+'
+    r'(?P<units>BOHR|ANG)?\s*'
+    r'(?P<projections>.+)'
+    r'END\s+PROJECTIONS',
+    re.VERBOSE | re.IGNORECASE | re.DOTALL
+    )
+
+proj_line_regex = re.compile(
+    r'(?P<site>[^:]+):(?P<ang_mtm>[^:]+):?'
+    r'(:(?P<zaxis>z=[^:]):)?'
+    r'((?P<xaxis>x=[^:]):)?'
+    '',
+    re.VERBOSE
+    )
+
+spinors_regex = re.compile(
+    'spinors\s+=\s+(T|.TRUE.)',
+    re.VERBOSE | re.IGNORECASE | re.DOTALL
+    )
+spin_regex = re.compile(r'[(](?P<up>u)?,?(?P<dn>d)?[)]')
+quant_dir_regex = re.compile(r'[[](?P<quant_dir>.+)[]]$')
+
+
+def remove_comments(s):
+    return re.compile(r'([!]|[#]).*$', re.MULTILINE).sub('', s)
 
 
 def read_dlv(fname, units='bohr'):
@@ -114,6 +143,137 @@ def read_atoms(fname, units='crystal'):
     basis = list(zip(symbols, taus))
 
     return basis
+
+
+def read_proj_line(line, dlv, basis, spinors):
+    basis_symbols = [x[0] for x in basis]
+    basis_vectors = [x[1] for x in basis]
+
+    # print(line)
+    zaxis = np.array([0, 0, 1])
+    xaxis = np.array([1, 0, 0])
+    radial = 1
+    zona = 1
+    spin = [1, -1]
+    quant_dir = np.array([0, 0, 1])
+
+    line = line.replace(' ', '')
+
+    if spin_regex.search(line) is not None:
+        spin = []
+        if spin_regex.search(line).group('u') is not None: spin.append(1)
+        if spin_regex.search(line).group('d') is not None: spin.append(-1)
+    line = re.sub(spin_regex.pattern, '', line)
+
+    if quant_dir_regex.search(line):
+        quant_dir = np.fromstring(quant_dir_regex.search(line).group('quant_dir'))
+    line = re.sub(quant_dir_regex.pattern, '', line)
+
+    parts = line.split(':')
+
+    if parts[0][0] == 'c':
+        center = [cartesian2crystal(np.fromstring(parts[0].split('=')[1], sep=','), dlv)]
+    elif parts[0][0] == 'f':
+        center = [np.fromstring(parts[0].split('=')[1], sep=',')]
+    else:
+        symbol = parts[0]
+        center = [basis_vectors[i] for i in range(len(basis)) if symbol == basis_symbols[i]]
+
+    orbitals_lmr = []
+    for orbital in parts[1].split(';'):
+        if orbital in orbitals.values():
+            tmp = [(l, mr) for (l, mr) in orbitals if orbitals[(l, mr)] == orbital]
+            if len(tmp) > 1: raise Exception
+            l, mr = tmp[0]
+            if mr == 0:
+                if l > 0:
+                    for i in range(1, 2*l+1+1):
+                        orbitals_lmr.append((l, i))
+                if l < 0:
+                    for i in range(1, abs(l)+1+1):
+                        orbitals_lmr.append((l, i))
+            else:
+                orbitals_lmr.append((l, mr))
+        elif re.compile('l=(?P<l>[-]?\d),?(mr=(?P<mr>(\d,?)+))?').match(orbital):
+            match = re.compile('l=(?P<l>[-]?\d),?(mr=(?P<mr>(\d,?)+))?').match(orbital)
+            for mr in match.group('mr').split(','):
+                orbitals_lmr.append((int(match.group('l')), int(mr)))
+        else:
+            raise ValueError('orbital specification "%s" not recognized' % orbital)
+
+    # sort angular momentum states
+    orbitals_lmr = sorted(orbitals_lmr)
+
+    if len(parts) > 2:
+        for part in parts[2:]:
+            if part.startswith('z='):
+                zaxis = np.fromstring(part.split('=')[1], sep=',')
+            if part.startswith('x='):
+                xaxis = np.fromstring(part.split('=')[1], sep=',')
+            if part.startswith('r='):
+                radial = int(part.split('=')[1])
+            if part.startswith('zona='):
+                zona = float(part.split('=')[1])
+
+    projections_line = []
+    if spinors:
+        for c in center:
+            for (l, mr) in orbitals_lmr:
+                for s in spin:
+                    proj = {
+                        'center': c,
+                        'l': l,
+                        'mr': mr,
+                        'z-axis': zaxis/np.linalg.norm(zaxis),
+                        'x-axis': xaxis/np.linalg.norm(xaxis),
+                        'r': radial,
+                        'zona': zona,
+                        'spin': s,
+                        'spin-axis': quant_dir/np.linalg.norm(quant_dir),
+                        'orbital': orbitals[(l, mr)],
+                    }
+                    projections_line.append(proj)
+    else:
+        for c in center:
+            for (l, mr) in orbitals_lmr:
+                proj = {
+                    'center': c,
+                    'l': l,
+                    'mr': mr,
+                    'z-axis': zaxis/np.linalg.norm(zaxis),
+                    'x-axis': xaxis/np.linalg.norm(xaxis),
+                    'r': radial,
+                    'zona': zona,
+                    'spin': None,
+                    'spin-axis': None,
+                    'orbital': orbitals[(l, mr)],
+                }
+                projections_line.append(proj)
+
+    return projections_line
+
+
+def read_projections(fname):
+    with open(fname, 'r') as f:
+        contents = f.read()
+    contents = remove_comments(contents)
+
+    spinors = spinors_regex.search(contents) is not None
+    match = projections_regex.search(contents)
+
+    if match.group('units') is not None:
+        units = {'ANG': 'angstrom', 'BOHR': 'bohr'}[match.group('units').upper()]
+    else:
+        units = 'angstrom'
+    dlv = read_dlv(fname, units)
+
+    basis = read_atoms(fname)
+
+    projections = []
+    for line in match.group('projections').rstrip('\n').split('\n'):
+        projections.extend(read_proj_line(line, dlv, basis, spinors))
+
+    return projections
 
 
 def read_kgrid(fname):
