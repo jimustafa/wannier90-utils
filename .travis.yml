@@ -4,7 +4,7 @@ python:
 before_install:
   - wget http://wannier.org/code/wannier90-2.0.1.tar.gz
   - tar zxvf wannier90-2.0.1.tar.gz
-  - pushd wannier90-2.0.1 && touch make.sys && F90=gfortran LIBS="-llapack -lblas" make popd
+  - pushd wannier90-2.0.1 && touch make.sys && F90=gfortran LIBS="-llapack -lblas" make && popd
 install:
   - pip install -r requirements.txt
 script:
