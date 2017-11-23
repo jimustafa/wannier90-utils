@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 cd "$HOME"
 wget http://wannier.org/code/wannier90-2.0.1.tar.gz
