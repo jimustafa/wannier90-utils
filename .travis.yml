@@ -12,12 +12,12 @@ python:
 before_install:
   - ./tools/travis-before-install.sh
 install:
+  - pip install .
   - pip install -r requirements.txt
 before_script:
-  - pip install .
   - pushd tests/_data/ && cp site.mk.example site.mk && make && popd
 script:
-  - py.test
+  - cd tests && py.test --cov=w90utils
 branches:
   only:
   - master
