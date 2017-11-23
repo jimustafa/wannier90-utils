@@ -4,6 +4,7 @@ Babel==2.5.1
 backports-abc==0.5
 certifi==2017.11.5
 chardet==3.0.4
+coverage==4.4.2
 docutils==0.14
 idna==2.6
 imagesize==0.7.1
@@ -14,7 +15,10 @@ numpy==1.13.3
 numpydoc==0.7.0
 pathtools==0.1.2
 port-for==0.3.1
+py==1.5.2
 Pygments==2.2.0
+pytest==3.2.5
+pytest-cov==2.5.1
 pytz==2017.3
 PyYAML==3.12
 requests==2.18.4

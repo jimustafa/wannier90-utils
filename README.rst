@@ -1,3 +1,10 @@
+===============
+wannier90-utils
+===============
+
+.. image:: https://travis-ci.org/jimustafa/wannier90-utils.svg?branch=master
+   :target: https://travis-ci.org/jimustafa/wannier90-utils
+
 About
 =====
 
