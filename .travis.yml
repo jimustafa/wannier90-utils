@@ -10,7 +10,7 @@ language: python
 python:
   - "2.7"
 before_install:
-  - pushd $HOME && wget http://wannier.org/code/wannier90-2.0.1.tar.gz && tar zxvf wannier90-2.0.1.tar.gz && wannier90-2.0.1 && touch make.sys && F90=gfortran LIBS="-llapack -lblas" make && popd
+  - ./tools/travis-before-install.sh
 install:
   - pip install -r requirements.txt
 before_script:
