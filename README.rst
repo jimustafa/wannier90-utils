@@ -8,6 +8,10 @@ wannier90-utils
 .. image:: https://coveralls.io/repos/github/jimustafa/wannier90-utils/badge.svg?branch=master
    :target: https://coveralls.io/github/jimustafa/wannier90-utils?branch=master
 
+.. image:: https://readthedocs.org/projects/wannier90-utils/badge/?version=latest
+   :target: http://wannier90-utils.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 
 About
 =====
