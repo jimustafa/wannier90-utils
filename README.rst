@@ -2,7 +2,8 @@
 wannier90-utils
 ===============
 
-|travis|_
+.. image:: https://travis-ci.org/jimustafa/wannier90-utils.svg?branch=master
+   :target: https://travis-ci.org/jimustafa/wannier90-utils
 
 About
 =====
@@ -37,9 +38,6 @@ License
 This software is free to use under the BSD license.
 See LICENSE.txt for more information.
 
-
-.. |travis| image:: https://travis-ci.org/jimustafa/wannier90-utils.svg?branch=master
-   :target: https://travis-ci.org/jimustafa/wannier90-utils
 
 .. _wannier90: http://wannier.org
 .. _1: http://dx.doi.org/10.1016/j.cpc.2014.05.003
