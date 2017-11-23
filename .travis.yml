@@ -15,6 +15,8 @@ before_install:
   - pushd wannier90-2.0.1 && touch make.sys && F90=gfortran LIBS="-llapack -lblas" make && popd
 install:
   - pip install -r requirements.txt
+before_script:
+  - pushd tests/_data/ && touch site.mk && WANNIER90_DIR=../../wannier90-2.0.1/ make && popd
 script:
   - py.test
 branches:

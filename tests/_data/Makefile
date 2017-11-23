@@ -2,6 +2,9 @@
 
 include site.mk
 
+W90=$(abspath $(WANNIER90_DIR)/wannier90.x)
+POSTW90=$(abspath $(WANNIER90_DIR)/postw90.x)
+
 EXAMPLES_1=$(foreach idx,01 02 03 04,example$(idx))
 EXAMPLES_2=$(foreach idx,05 06 07 09 10 11 13 17 18 19 20,example$(idx))
 EXAMPLES=$(EXAMPLES_1) $(EXAMPLES_2)
