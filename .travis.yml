@@ -12,12 +12,14 @@ python:
 before_install:
   - ./tools/travis-before-install.sh
 install:
-  - pip install .
   - pip install -r requirements.txt
+  - pip install tox-travis coveralls
 before_script:
   - pushd tests/_data/ && cp site.mk.example site.mk && make && popd
 script:
-  - py.test
+  - tox
 branches:
   only:
   - master
+after_success:
+  - coveralls
