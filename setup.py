@@ -19,7 +19,8 @@ setup(
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    packages=find_packages(exclude=['docs', 'tests']),
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
     setup_requires=['pytest-runner'],
     install_requires=[
         'numpy',
