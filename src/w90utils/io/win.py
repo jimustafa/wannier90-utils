@@ -34,7 +34,7 @@ kpoints_regex = re.compile(
     )
 
 kgrid_regex = re.compile(
-    r'MP_GRID\s+(?P<nk1>\d+)\s+(?P<nk2>\d+)\s+(?P<nk3>\d+)\s+',
+    r'MP_GRID\s+[=:]?\s+(?P<nk1>\d+)\s+(?P<nk2>\d+)\s+(?P<nk3>\d+)\s+',
     re.VERBOSE | re.IGNORECASE | re.DOTALL
     )
 

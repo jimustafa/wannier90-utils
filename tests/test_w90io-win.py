@@ -8,23 +8,38 @@ from w90utils import io as w90io
 
 
 @pytest.mark.parametrize('example', ['example01', 'example02', 'example03', 'example04'])
-def test_dlv(data_dir, example):
+def test_dlv_io(data_dir, example):
     os.chdir(os.path.join(data_dir, example))
 
     dlv_ref = w90io.nnkp.read_dlv('wannier.nnkp', units='bohr')
-    dlv = w90io.win.read_dlv('wannier.win', units='bohr')
 
-    assert np.allclose(dlv, dlv_ref)
+    dlv_1 = w90io.win.read_dlv('wannier.win', units='bohr')
+
+    with open('test.win', 'w') as f:
+        w90io.win.print_unit_cell(dlv_ref, units='bohr', file=f)
+    dlv_2 = w90io.win.read_dlv('wannier.win', units='bohr')
+
+    assert np.allclose(dlv_1, dlv_ref)
+    assert np.allclose(dlv_2, dlv_ref)
 
 
 @pytest.mark.parametrize('example', ['example01', 'example02', 'example03', 'example04'])
-def test_read_atoms(data_dir, example):
+def test_atoms_io(data_dir, example):
     os.chdir(os.path.join(data_dir, example))
 
     basis_ref = [x for x in w90io.wout.read_centers_xyz('wannier_centres.xyz') if x[0] != 'X']
-    basis = w90io.win.read_atoms('wannier.win', units='angstrom')
 
-    for (symbol_ref, tau_ref), (symbol, tau) in zip(basis_ref, basis):
+    basis_1 = w90io.win.read_atoms('wannier.win', units='angstrom')
+
+    with open('test.win', 'w') as f:
+        w90io.win.print_atoms(basis_ref, units='ang', file=f)
+    basis_2 = w90io.win.read_atoms('test.win', units='angstrom')
+
+    for (symbol_ref, tau_ref), (symbol, tau) in zip(basis_ref, basis_1):
+        assert symbol == symbol_ref
+        assert np.allclose(tau, tau_ref)
+
+    for (symbol_ref, tau_ref), (symbol, tau) in zip(basis_ref, basis_2):
         assert symbol == symbol_ref
         assert np.allclose(tau, tau_ref)
 
@@ -66,10 +81,19 @@ def test_read_projections(data_dir, example):
 
 
 @pytest.mark.parametrize('example', ['example01', 'example02', 'example03', 'example04'])
-def test_read_kpoints(data_dir, example):
+def test_kpoints_io(data_dir, example):
     os.chdir(os.path.join(data_dir, example))
 
     kpoints_ref = w90io.nnkp.read_kpoints('wannier.nnkp')
-    kpoints = w90io.win.read_kpoints('wannier.win')
 
-    assert np.allclose(kpoints, kpoints_ref)
+    kpoints_1 = w90io.win.read_kpoints('wannier.win')
+    kgrid_1 = w90io.win.read_kgrid('wannier.win')
+
+    with open('test.win', 'w') as f:
+        w90io.win.print_kpoints(kpoints_ref, mp_grid=kgrid_1, file=f)
+    kgrid_2 = w90io.win.read_kgrid('test.win')
+    kpoints_2 = w90io.win.read_kpoints('test.win')
+
+    assert np.allclose(kgrid_1, kgrid_2)
+    assert np.allclose(kpoints_1, kpoints_ref)
+    assert np.allclose(kpoints_2, kpoints_ref)

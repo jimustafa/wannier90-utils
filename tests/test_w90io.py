@@ -18,6 +18,19 @@ def test_read_data(data_dir, example):
         w90io.read_data()
 
 
+@pytest.mark.parametrize('example', ['example03', 'example04'])
+def test_eig_io(data_dir, example):
+    os.chdir(os.path.join(data_dir, example))
+
+    eig_ref = w90io.read_eig('wannier.eig')
+
+    with open('test.eig', 'w') as f:
+        w90io.write_eig('test.eig', eig_ref)
+    eig = w90io.read_eig('test.eig')
+
+    assert np.allclose(eig, eig_ref)
+
+
 @pytest.mark.parametrize('example', ['example01', 'example02', 'example03', 'example04'])
 def test_read_amn(data_dir, example):
     os.chdir(os.path.join(data_dir, example))
