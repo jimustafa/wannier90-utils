@@ -82,7 +82,8 @@ def omega_od(Mmn, bweights):            # Eq. 35
 
 def omega_dod(Mmn, bvectors, bweights):
     """
-    Compute the spread functional
+    Compute the sum of the diagonal and off-diagonal contribution to the spread
+    functional
 
     Parameters
     ----------
@@ -127,7 +128,7 @@ def omega_iod(m, bweights, idx=None):                # Eq. 43
 
 def omega_i(Mmn, bweights):
     """
-    Compute the invariant and off-diagonal contribution to the spread functional
+    Compute the invariant contribution to the spread functional
 
     Parameters
     ----------
