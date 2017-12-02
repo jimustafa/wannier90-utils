@@ -25,7 +25,7 @@ def print_kpoints(kpoints, header='', units='crystal', file=sys.stdout):
 
 
 def read_bands_kpoints(fname):
-    """
+    r"""
     Read k-points from the geninterp dat file
 
     Parameters
@@ -35,7 +35,7 @@ def read_bands_kpoints(fname):
     Returns
     -------
     kpoints : ndarray, shape (nkpts, 3)
-        array of kpoints using for geninterp, in of units :math:`\frac{1}{\text{\AA}}`
+        array of kpoints using for geninterp, in of units :math:`\text{\AA}^{-1}`
 
     """
     raw_data = np.loadtxt(fname)

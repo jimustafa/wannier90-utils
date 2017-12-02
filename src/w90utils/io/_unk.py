@@ -4,7 +4,7 @@ import numpy as np
 from scipy.io import FortranFile
 
 
-# __all__ = ['read_unk', 'write_unk']
+__all__ = []
 
 
 # def read_unk(fname, gspace=False):

@@ -51,4 +51,5 @@ Module contents
 .. automodule:: w90utils.io
     :members:
     :undoc-members:
+    :imported-members:
     :show-inheritance:

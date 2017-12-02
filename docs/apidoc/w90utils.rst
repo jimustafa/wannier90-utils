@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+    :maxdepth: 1
 
     w90utils.io
 
@@ -26,4 +27,5 @@ Module contents
 .. automodule:: w90utils
     :members:
     :undoc-members:
+    :imported-members:
     :show-inheritance:

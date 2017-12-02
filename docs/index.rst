@@ -8,7 +8,7 @@ wannier90-utils
 ===============
 
 This package provides a library of functions for reading/writing and
-manipulating the data associated with the `wannier90`_ code [1_]
+manipulating the data associated with the `wannier90`_ code [1_].
 
 .. toctree::
    :maxdepth: 1
