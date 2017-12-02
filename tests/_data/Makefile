@@ -1,73 +1,17 @@
-#!/bin/sh
-
 include site.mk
 
-W90=$(abspath $(WANNIER90_DIR)/wannier90.x)
-POSTW90=$(abspath $(WANNIER90_DIR)/postw90.x)
 
-EXAMPLES_1=$(foreach idx,01 02 03 04,example$(idx))
-EXAMPLES_2=$(foreach idx,05 06 07 09 10 11 13 17 18 19 20,example$(idx))
-EXAMPLES=$(EXAMPLES_1) $(EXAMPLES_2)
+WANNIER90_VERSIONS := 2.0.1 2.1.0
 
 
-default: clean $(EXAMPLES)
+default: clean $(WANNIER90_VERSIONS)
 
-$(EXAMPLES):
-	cp -r $(WANNIER90_DIR)/examples/$@ .
-	cp Makefile $@
-	make -C $@ -I ../ run-$@
-
-$(foreach example,$(EXAMPLES_2),run-$(example)):
-	$(foreach fname, $(wildcard $(basename $(wildcard *.win))*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
-
-run-example01:
-	$(foreach fname, $(wildcard gaas.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
-	echo "write_xyz=true" >> wannier.win
-	$(W90)
-
-run-example02:
-	$(foreach fname, $(wildcard lead.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
-	echo "hr_plot=true" >> wannier.win
-	echo "write_xyz=true" >> wannier.win
-	$(W90)
-
-run-example03:
-	$(foreach fname, $(wildcard silicon.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp wannier
-	echo "hr_plot=true" >> wannier.win
-	echo "write_xyz=true" >> wannier.win
-	echo "bands_plot=true" >> wannier.win
-	$(W90)
-	echo "kpath=true" >> wannier.win
-	echo "kpath_task=bands" >> wannier.win
-	echo "geninterp=true" >> wannier.win
-	echo "" >> wannier_geninterp.kpt
-	echo "crystal" >> wannier_geninterp.kpt
-	head -n 1 wannier_band.kpt >> wannier_geninterp.kpt
-	awk 'FNR > 1 {OFS=" "; print NR-1,$$1,$$2,$$3}' wannier_band.kpt >> wannier_geninterp.kpt
-	$(POSTW90)
-
-run-example04:
-	$(foreach fname, $(wildcard copper.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
-	echo "hr_plot=true" >> wannier.win
-	echo "write_xyz=true" >> wannier.win
-	echo "bands_plot=true" >> wannier.win
-	$(W90)
-	echo "kpath=true" >> wannier.win
-	echo "kpath_task=bands" >> wannier.win
-	echo "geninterp=true" >> wannier.win
-	echo "geninterp_alsofirstder=true" >> wannier.win
-	echo "" >> wannier_geninterp.kpt
-	echo "crystal" >> wannier_geninterp.kpt
-	head -n 1 wannier_band.kpt >> wannier_geninterp.kpt
-	awk 'FNR > 1 {OFS=" "; print NR-1,$$1,$$2,$$3}' wannier_band.kpt >> wannier_geninterp.kpt
-	$(POSTW90)
+$(WANNIER90_VERSIONS):
+	mkdir -p wannier90-$@
+	cp particular.mk wannier90-$@
+	WANNIER90_ROOT=$(WANNIER90_ROOT) WANNIER90_VERSION=$@ make -C wannier90-$@ -f particular.mk -I ../
 
 clean:
-	rm -rf example*
+	- rm -rf $(foreach version,$(WANNIER90_VERSIONS),wannier90-$(version))
 
-.PHONY: clean $(EXAMPLES) $(foreach example,$(EXAMPLES),run-$(example))
+.PHONY: default $(WANNIER90_VERSIONS) clean
