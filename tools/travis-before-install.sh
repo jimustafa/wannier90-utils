@@ -2,6 +2,10 @@
 set -ex
 
 cd "$HOME"
-wget http://wannier.org/code/wannier90-2.0.1.tar.gz
-tar zxvf wannier90-2.0.1.tar.gz
-cd wannier90-2.0.1 && touch make.sys && F90=gfortran LIBS="-llapack -lblas" make
+for version in 2.0.1 2.1.0; do
+  curl http://wannier.org/code/wannier90-${version}.tar.gz | tar xz
+  pushd wannier90-${version}
+  touch make.sys make.inc
+  F90=gfortran LIBS="-llapack -lblas" make
+  popd
+done

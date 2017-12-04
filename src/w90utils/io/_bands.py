@@ -25,8 +25,6 @@ def read_bands(fname):
     if nkpts is None:
         raise Exception
 
-    print(nkpts)
-
     raw_data = np.loadtxt(fname)
     nbnds = len(raw_data) // nkpts
     bands = raw_data[:, 1].reshape((nbnds, nkpts)).transpose()
