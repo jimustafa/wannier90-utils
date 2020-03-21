@@ -1,5 +1,5 @@
 """Wannier90 I/O routines pertaining to WIN files"""
-from __future__ import absolute_import, division, print_function
+
 import sys
 import re
 
@@ -115,7 +115,7 @@ def read_atoms(fname, units='crystal'):
     taus = []
     for line in match.group('atoms').strip().splitlines():
         symbols.append(line.split()[0])
-        taus.append(np.array(map(float, line.split()[1:])))
+        taus.append(np.array(list(map(float, line.split()[1:]))))
 
     if match.group('suffix').upper() == 'FRAC':
         units_win = 'crystal'
@@ -181,7 +181,7 @@ def read_proj_line(line, dlv, basis, spinors):
 
     orbitals_lmr = []
     for orbital in parts[1].split(';'):
-        if orbital in orbitals.values():
+        if orbital in list(orbitals.values()):
             tmp = [(l, mr) for (l, mr) in orbitals if orbitals[(l, mr)] == orbital]
             if len(tmp) > 1: raise Exception
             l, mr = tmp[0]

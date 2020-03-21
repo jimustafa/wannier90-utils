@@ -1,5 +1,5 @@
 """Wannier90 I/O library"""
-from __future__ import absolute_import, division, print_function
+
 import collections
 
 from ._amn import *

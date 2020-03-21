@@ -48,4 +48,4 @@ hybrid_orbitals[(-5, 4)] = 'sp3d2-4'
 hybrid_orbitals[(-5, 5)] = 'sp3d2-5'
 hybrid_orbitals[(-5, 6)] = 'sp3d2-6'
 
-orbitals = dict(atomic_orbitals, **hybrid_orbitals)
+orbitals = {**atomic_orbitals, **hybrid_orbitals}

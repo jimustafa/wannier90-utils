@@ -15,16 +15,14 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
-    setup_requires=['pytest-runner'],
     install_requires=[
         'numpy',
         'scipy',
     ],
-    tests_require=['pytest', 'pytest-cov'],
 )
