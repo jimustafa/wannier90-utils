@@ -1,0 +1,8 @@
+coverage
+numpydoc
+pip-tools
+pytest
+pytest-cov
+sphinx
+sphinx-rtd-theme
+tox

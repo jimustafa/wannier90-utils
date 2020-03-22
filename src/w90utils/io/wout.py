@@ -1,5 +1,4 @@
 """Wannier90 I/O routines pertaining to WOUT files"""
-from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
@@ -11,7 +10,7 @@ def read_centers_xyz(fname):
     centers = []
     for line in contents[2:]:
         symbol = line.split()[0]
-        tau = np.array(map(float, line.split()[1:]))
+        tau = np.array(list(map(float, line.split()[1:])))
 
         centers.append((symbol, tau))
 
@@ -28,8 +27,8 @@ def read_conv(fname):
         if line.strip().endswith('CONV'):
             data_lines.append(line)
 
-    conv_data = np.array([map(float, line.split()[:4]) for line in data_lines[3:]])
-    conv_data = dict(zip(['iter', 'delta', 'gradient', 'spread', 'time'], conv_data.T))
+    conv_data = np.array([list(map(float, line.split()[:4])) for line in data_lines[3:]])
+    conv_data = dict(list(zip(['iter', 'delta', 'gradient', 'spread', 'time'], conv_data.T)))
     conv_data['iter'] = conv_data['iter'].astype(int)
 
     return conv_data

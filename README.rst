@@ -25,7 +25,7 @@ Python library for reading/writing and manipulating data associated with the
 Requirements
 ============
 
-- Python 2.7 (compatibility with Python 3 is untested)
+- Python 3.6+
 - NumPy
 - SciPy
 

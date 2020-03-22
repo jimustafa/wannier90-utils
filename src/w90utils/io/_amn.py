@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 import numpy as np
 
 
@@ -21,7 +19,7 @@ def read_amn(fname):
     """
     with open(fname, 'r') as f:
         f.readline()    # header
-        [nbnds, nkpts, nproj] = map(int, f.readline().split())
+        [nbnds, nkpts, nproj] = list(map(int, f.readline().split()))
         data_str = f.read()
 
     raw_data = np.fromstring(data_str, sep='\n').reshape((nkpts*nbnds*nproj, 5))

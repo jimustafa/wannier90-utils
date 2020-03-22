@@ -1,6 +1,5 @@
-from __future__ import absolute_import, division, print_function
 import contextlib
-import cStringIO as StringIO
+import io as StringIO
 
 import numpy as np
 from scipy.io import FortranFile
@@ -16,7 +15,7 @@ class CheckpointIO(object):
 
     def from_file(self, fname):
         with FortranFile(fname, 'r') as f:
-            self.header = ''.join(f.read_record('c'))
+            self.header = ''.join(map(str, f.read_record('c')))
             self.nbnds = f.read_ints()[0]
             self.nbnds_excl = f.read_ints()[0]
             self.bands_excl = f.read_ints()

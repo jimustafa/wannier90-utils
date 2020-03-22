@@ -1,5 +1,3 @@
-from __future__ import absolute_import, division, print_function
-
 import numpy as np
 
 
@@ -18,7 +16,7 @@ def _process_mmn_file(fname):
     # a block consists of the header line and the following nbnds**2 lines
     blk_len = nbnds**2 + 1
     # indices of the starting line of each block
-    blk_start_idx = range(2, len(contents), blk_len)
+    blk_start_idx = list(range(2, len(contents), blk_len))
 
     kpb_kidx = np.zeros((nkpts, nntot), dtype=int)
     kpb_g = np.zeros((nkpts, nntot, 3), dtype=int)
@@ -36,7 +34,7 @@ def _process_mmn_file(fname):
         block = contents[istart:(istart+blk_len)]
         block_header = block[0]
         kpb_kidx[ikpt][inn] = int(block_header.split()[1]) - 1
-        kpb_g[ikpt][inn] = map(int, block_header.split()[2:])
+        kpb_g[ikpt][inn] = list(map(int, block_header.split()[2:]))
         s = ''.join(block[1:])
         a = np.fromstring(s, sep='\n').view(complex)
         mmn[ikpt, inn, :, :] = a.reshape((nbnds, nbnds), order='F')
