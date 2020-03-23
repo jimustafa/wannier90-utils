@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: wannier90-utils
+name: tests
 
 on:
   push:
@@ -18,6 +15,10 @@ jobs:
         python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
+    - name: Install wannier90
+      run: |
+        sudo apt install gfortran libblas-dev liblapack-dev
+        sh ./tests/setup-travis.sh
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
@@ -27,6 +28,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r ./requirements/dev.txt
-    - name: Test with pytest
+    - name: Create reference data
+      run:
+        pushd tests/_data/ && cp site.mk.example site.mk && make && popd
+    - name: Test with tox
       run: |
-        pytest
+        tox -e py
