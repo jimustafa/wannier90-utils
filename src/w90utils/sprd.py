@@ -1,4 +1,4 @@
-"""Functions for computing components of the spread"""
+"""Functions for computing Wannier centers and components of the spread"""
 
 import numpy as np
 

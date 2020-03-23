@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../src'))
 # -- Project information -----------------------------------------------------
 
 project = 'wannier90-utils'
-copyright = '2020, Jamal I. Mustafa'
+copyright = '2016, Jamal I. Mustafa'
 author = 'Jamal I. Mustafa'
 
 # The full version, including alpha/beta/rc tags
@@ -31,8 +31,11 @@ release = 'v0.1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'numpydoc',
     'sphinx_rtd_theme',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.viewcode',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -55,3 +58,8 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+
+# -- Options for extensions --------------------------------------------------
+
+napoleon_use_rtype = False

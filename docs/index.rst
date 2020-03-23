@@ -10,26 +10,45 @@ wannier90-utils
 This package provides a library of functions for reading/writing and
 manipulating the data associated with the `wannier90`_ code [1_].
 
-.. toctree::
-   :maxdepth: 1
 
-   about
-   install
-   examples
-   ./apidoc/w90utils
+Features
+========
+
+- Routines for reading/writing/manipulating a variety of files
+
+  - manipulating WIN files (see :ref:`here <win>`)
+  - parsing WOUT files (see :ref:`here <wout>`)
+  - the ``nnkp`` file (see :ref:`here <nnkp>`)
+  - the eigenvalues, overlap matrices, and projection matrices (see :ref:`here <basic>`)
+  - output of ``postw90`` program, such as bandstructures (see :ref:`here <postw90>`)
+
+- Utilities for computing the centers and spreads of Wannier functions (see :ref:`here <sprd>`)
 
 
-Quick Example
-=============
+Installation
+============
 
-Read the Hamiltonian in the Wannier representation
---------------------------------------------------
+To install the latest version of the wannier90-utils package, simply clone the repository and install using ``pip``.
 
 ::
 
-   from w90utils import io as w90io
+   git clone https://github.com/jimustafa/wannier90-utils.git
+   cd wannier90-utils && pip install .
 
-   HR, Rvectors, Rweights = w90io.read_hr('wannier_hr.dat')
+
+Documentation
+=============
+
+.. toctree::
+   :maxdepth: 2
+
+   win
+   wout
+   nnkp
+   basic
+   sprd
+   postw90
+   examples
 
 
 Indices and tables
