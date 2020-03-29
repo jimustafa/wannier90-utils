@@ -1,3 +1,4 @@
+-c setup.txt
 coverage
 numpydoc
 pip-tools

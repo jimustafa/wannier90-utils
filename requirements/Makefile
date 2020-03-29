@@ -1,13 +1,13 @@
-PROJECT_ROOT=../
-
 .PHONY: all
-all: dev.txt dev-local.txt
+all: setup.txt dev.txt
 
 .PHONY: install-dev
-install-dev: dev.txt dev-local.txt
+install-dev: setup.txt dev.txt
 	pip-sync $^
+	pip install -e ../
 
-dev-local.txt: dev.txt
+setup.txt: ../setup.py
+	pip-compile $< --output-file $@
 
-%.txt: %.in
+dev.txt: dev.in setup.txt
 	pip-compile $<
