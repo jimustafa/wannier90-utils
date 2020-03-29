@@ -52,7 +52,7 @@ def read_mmn(fname):
 
     Returns
     -------
-    mmn : ndarray, shape (nkpts, nntot, nbnds, nbnds)
+    ndarray, shape (nkpts, nntot, nbnds, nbnds)
 
     """
     return _process_mmn_file(fname)[0]

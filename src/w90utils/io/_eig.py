@@ -11,10 +11,11 @@ def read_eig(fname):
     Parameters
     ----------
     fname : str
+        path to EIG file
 
     Returns
     -------
-    eig : ndarray, shape (nkpts, nbnds, nproj)
+    ndarray, shape (nkpts, nbnds, nproj)
 
     """
     raw_data = np.loadtxt(fname)
@@ -37,7 +38,8 @@ def write_eig(fname, eig):
 
     Parameters
     ----------
-    fname : eig
+    fname : str
+        path to EIG file
     eig : ndarray, shape (nkpts, nbnds)
 
 
@@ -62,10 +64,11 @@ def read_hamiltonian(fname):
     Parameters
     ----------
     fname: str
+        path to EIG file
 
     Returns
     -------
-    Hk: ndarray, shape (nkpts, nbnds, nbnds)
+    ndarray, shape (nkpts, nbnds, nbnds)
 
     """
     eig = read_eig(fname)

@@ -21,6 +21,7 @@ Berkeley in the field of condensed matter physics. Its purpose is to provide a
 Python library for reading/writing and manipulating data associated with the
 `wannier90`_ code [1_].
 
+- Documentation: https://wannier90-utils.readthedocs.io
 
 Requirements
 ============

@@ -14,7 +14,7 @@ def read_amn(fname):
 
     Returns
     -------
-    amn : ndarray, shape (nkpts, nbnds, nproj)
+    ndarray, shape (nkpts, nbnds, nproj)
 
     """
     with open(fname, 'r') as f:

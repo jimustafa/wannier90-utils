@@ -20,6 +20,7 @@ script:
   - tox
 branches:
   only:
+  - develop
   - master
 after_success:
   - coveralls
