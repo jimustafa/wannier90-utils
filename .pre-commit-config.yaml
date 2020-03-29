@@ -1,0 +1,11 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.4.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-ast
+  - id: check-yaml
+  - id: end-of-file-fixer
+  - id: file-contents-sorter
+    files: ^requirements/dev.in$
+  - id: trailing-whitespace

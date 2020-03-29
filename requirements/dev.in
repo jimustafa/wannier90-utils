@@ -2,6 +2,7 @@
 coverage
 numpydoc
 pip-tools
+pre-commit
 pytest
 pytest-cov
 sphinx
