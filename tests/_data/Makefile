@@ -1,7 +1,7 @@
 include site.mk
 
 
-WANNIER90_VERSIONS := 2.0.1 2.1.0
+WANNIER90_VERSIONS := 2.0.1 2.1 3.0.0 3.1.0
 
 
 default: clean $(WANNIER90_VERSIONS)

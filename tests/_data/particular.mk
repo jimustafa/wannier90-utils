@@ -7,13 +7,14 @@ EXAMPLES_1=$(foreach idx,01 02 03 04,example$(idx))
 EXAMPLES_2=$(foreach idx,05 06 07 09 10 11 13 17 18 19 20,example$(idx))
 EXAMPLES=$(EXAMPLES_1) $(EXAMPLES_2)
 
-
-define write_hr
-	$(if $(filter $(shell echo $(subst .,,$(WANNIER90_VERSION))\>=210 | bc), 1), echo "write_hr=true" >> wannier.win, echo "hr_plot=true" >> wannier.win)
-endef
+ifeq ($(WANNIER90_VERSION), 2.0.1)
+	WRITE_HR="hr_plot=true"
+else
+	WRITE_HR="write_hr=true"
+endif
 
 define modify_win
-	$(call write_hr)
+	echo $(WRITE_HR) >> wannier.win
 	echo "write_xyz=true" >> wannier.win
 	echo "bands_plot=true" >> wannier.win
 	echo "kpath=true" >> wannier.win
@@ -31,43 +32,43 @@ $(EXAMPLES):
 
 $(foreach example,$(EXAMPLES_2),run-$(example)):
 	$(foreach fname, $(wildcard $(basename $(wildcard *.win))*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
+	$(W90) -pp wannier
 
 run-example01:
 	$(foreach fname, $(wildcard gaas.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
+	$(W90) -pp wannier
 	echo "write_xyz=true" >> wannier.win
-	$(W90)
+	$(W90) wannier
 
 run-example02:
 	$(foreach fname, $(wildcard lead.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
-	$(call write_hr)
+	$(W90) -pp wannier
+	echo $(WRITE_HR) >> wannier.win
 	echo "write_xyz=true" >> wannier.win
-	$(W90)
+	$(W90) wannier
 
 run-example03:
 	$(foreach fname, $(wildcard silicon.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
+	$(W90) -pp wannier
 	$(call modify_win)
-	$(W90)
+	$(W90) wannier
 	echo "" >> wannier_geninterp.kpt
 	echo "crystal" >> wannier_geninterp.kpt
 	head -n 1 wannier_band.kpt >> wannier_geninterp.kpt
 	awk 'FNR > 1 {OFS=" "; print NR-1,$$1,$$2,$$3}' wannier_band.kpt >> wannier_geninterp.kpt
-	$(POSTW90)
+	$(POSTW90) wannier
 
 run-example04:
 	$(foreach fname, $(wildcard copper.*), mv $(fname) $(addsuffix $(suffix $(fname)), wannier);)
-	$(W90) -pp
+	$(W90) -pp wannier
 	$(call modify_win)
 	echo "geninterp_alsofirstder=true" >> wannier.win
-	$(W90)
+	$(W90) wannier
 	echo "" >> wannier_geninterp.kpt
 	echo "crystal" >> wannier_geninterp.kpt
 	head -n 1 wannier_band.kpt >> wannier_geninterp.kpt
 	awk 'FNR > 1 {OFS=" "; print NR-1,$$1,$$2,$$3}' wannier_band.kpt >> wannier_geninterp.kpt
-	$(POSTW90)
+	$(POSTW90) wannier
 
 clean:
 	rm -rf example*
