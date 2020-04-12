@@ -271,7 +271,8 @@ def read_projections(fname):
 
     projections = []
     for line in match.group('projections').rstrip('\n').split('\n'):
-        projections.extend(read_proj_line(line, dlv, basis, spinors))
+        if line:
+            projections.extend(read_proj_line(line, dlv, basis, spinors))
 
     return projections
 

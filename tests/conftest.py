@@ -6,11 +6,13 @@ import pytest
 
 example_ids = {
     'wannier90-2.0.1': [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 17, 18, 19, 20],
-    'wannier90-2.1.0': [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 17, 18, 19, 20],
+    'wannier90-2.1': [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 17, 18, 19, 20],
+    'wannier90-3.0.0': [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 17, 18, 19, 20],
+    'wannier90-3.1.0': [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 17, 18, 19, 20],
 }
 
 
-@pytest.fixture(scope='session', params=['wannier90-2.0.1', 'wannier90-2.1.0'])
+@pytest.fixture(scope='session', params=example_ids.keys())
 def data_dir(request, tmpdir_factory):
     data_dir = os.path.join(os.path.dirname(__file__), './_data')
     for example_dir in [('%s/example%02d' % (request.param, i)) for i in example_ids[request.param]]:

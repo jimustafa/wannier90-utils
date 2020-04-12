@@ -158,6 +158,9 @@ def test_read_chkpt_mats(data_dir, example):
 
 @pytest.mark.parametrize('example', ['example03', 'example04'])
 def test_read_bands(data_dir, example):
+    if 'wannier90-3.0.0' in data_dir:
+        pytest.xfail('known bug in wannier90-v3.0.0')
+
     os.chdir(os.path.join(data_dir, example))
 
     bands_ref = w90io.postw90.read_bands('wannier_geninterp.dat')
