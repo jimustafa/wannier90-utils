@@ -1,0 +1,40 @@
+name: tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6]
+
+    steps:
+    - name: Download wannier90-2.0.1
+      uses: wei/curl@v1
+      with:
+        args: http://wannier.org/code/wannier90-2.0.1.tar.gz
+    - uses: actions/checkout@v2
+    - name: Install wannier90
+      run: |
+        sudo apt install gfortran libblas-dev liblapack-dev
+        sh ./tests/setup-travis.sh
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ./requirements/dev.txt
+    - name: Create reference data
+      run:
+        pushd tests/_data/ && cp site.mk.example site.mk && make && popd
+    - name: Test with tox
+      run: |
+        tox -e py
