@@ -59,7 +59,7 @@ spinors_regex = re.compile(
     re.VERBOSE | re.IGNORECASE | re.DOTALL
     )
 spin_regex = re.compile(r'[(](?P<up>u)?,?(?P<dn>d)?[)]')
-quant_dir_regex = re.compile(r'[[](?P<quant_dir>.+)[]]$')
+quant_dir_regex = re.compile(r'[\[](?P<quant_dir>.+)[\]]$')
 
 
 def remove_comments(s):
