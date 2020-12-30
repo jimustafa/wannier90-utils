@@ -55,11 +55,11 @@ proj_line_regex = re.compile(
     )
 
 spinors_regex = re.compile(
-    'spinors\s+=\s+(T|.TRUE.)',
+    r'spinors\s+=\s+(T|.TRUE.)',
     re.VERBOSE | re.IGNORECASE | re.DOTALL
     )
 spin_regex = re.compile(r'[(](?P<up>u)?,?(?P<dn>d)?[)]')
-quant_dir_regex = re.compile(r'[[](?P<quant_dir>.+)[]]$')
+quant_dir_regex = re.compile(r'[\[](?P<quant_dir>.+)[\]]$')
 
 
 def remove_comments(s):
@@ -194,8 +194,8 @@ def read_proj_line(line, dlv, basis, spinors):
                         orbitals_lmr.append((l, i))
             else:
                 orbitals_lmr.append((l, mr))
-        elif re.compile('l=(?P<l>[-]?\d),?(mr=(?P<mr>(\d,?)+))?').match(orbital):
-            match = re.compile('l=(?P<l>[-]?\d),?(mr=(?P<mr>(\d,?)+))?').match(orbital)
+        elif re.compile(r'l=(?P<l>[-]?\d),?(mr=(?P<mr>(\d,?)+))?').match(orbital):
+            match = re.compile(r'l=(?P<l>[-]?\d),?(mr=(?P<mr>(\d,?)+))?').match(orbital)
             for mr in match.group('mr').split(','):
                 orbitals_lmr.append((int(match.group('l')), int(mr)))
         else:
